@@ -34,6 +34,7 @@ class AuthController extends Controller
             return response()->json('Something went wrong on the server', $e->getCode());
         }
     }
+
     public function register(Request $request)
     {
         $request->validate([
@@ -47,5 +48,13 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens->each(function ($token, $key){
+            $token->delete();
+        });
+        return response()->json('logged out successfully', 200);
     }
 }
