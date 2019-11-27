@@ -81,6 +81,10 @@ class TodosController extends Controller
      */
     public function destroy(Todo $todo)
     {
+        if ($todo->user_id !== auth()->user()->id) {
+            return response()->json('Unauthorized', 401);
+        }
+
         $todo->delete();
         return response('delete todo item',200);
     }
